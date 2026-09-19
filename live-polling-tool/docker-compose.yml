@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:8
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: [mongo_data:/data/db]
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports: ["6379:6379"]
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports: ["8080:8080"]
+    environment:
+      PORT: 8080
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: live_polling
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: change-this-in-production
+      FRONTEND_URL: http://localhost:5173
+    depends_on: [mongodb, redis]
+volumes:
+  mongo_data:

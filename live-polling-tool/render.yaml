@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: live-polling-backend
+    env: go
+    rootDir: backend
+    buildCommand: go build -o app ./cmd/server
+    startCommand: ./app
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: live_polling
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
